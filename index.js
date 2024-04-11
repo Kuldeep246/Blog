@@ -7,7 +7,7 @@ const UserRouter=require('./routes/User')
 const app = express();
 app.use(express.json());
 
-app.use("/", AuthRouter);
+app.use("/auth", AuthRouter);
 app.use("/blog",BlogRouter)
 app.use("/user",UserRouter)
 

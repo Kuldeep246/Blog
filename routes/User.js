@@ -3,18 +3,12 @@ const express = require('express');
 const verifyToken = require('../middlewares/verifyToken')
 const db = require('../db')
 
-
 const router = express.Router();
 
-
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/', verifyToken, async (req, res) => {
     const userId = req.user.id;
-    const { id } = req.params;
+    console.log(userId);
     const { email, password } = req.body;
-
-    if (userId != id) {
-        return res.status(403).json({ error: "Access not granted" });
-    }
 
     if (!email || !password) {
         return res.status(400).json({ error: "Email and password are required" });
@@ -30,14 +24,9 @@ router.put('/:id', verifyToken, async (req, res) => {
     }
 });
 
-
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/', verifyToken, async (req, res) => {
     const userId = req.user.id;
-    const { id } = req.params.id;
-
-    if (userId != id) {
-        return res.status(403).json({ error: "Access not granted" });
-    }
+    console.log(userId)
 
     try {
         await db.promise().beginTransaction();
@@ -50,7 +39,6 @@ router.delete('/:id', verifyToken, async (req, res) => {
 
         res.json({ message: "User and associated blog posts deleted successfully" });
     } catch (error) {
-
         await db.promise().rollback();
 
         console.error("Error deleting user and associated blog posts:", error);
@@ -58,4 +46,4 @@ router.delete('/:id', verifyToken, async (req, res) => {
     }
 });
 
-module.exports=router;
+module.exports = router;
